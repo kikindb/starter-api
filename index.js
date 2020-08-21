@@ -1,33 +1,41 @@
+const Joi = require('joi');
 const express = require('express');
 const mongoose = require('mongoose');
+
+//Routes
+const users = require('./routes/users');
+
+const app = express();
 
 //Connect to mongodb
 mongoose.connect('mongodb://localhost/api-app')
   .then(() => console.log("Connected to MongoDB..."))
   .catch(err => console.error('Could not connect to MongoDB...', err));
 
-//Create Schema
-const userSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  password: String,
-  date: { type: Date, default: Date.now },
-  isActive: Boolean
-});
-//Create model
-const User = mongoose.model('User', userSchema);
+app.use(express.json());
+app.use('/api/users', users);
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Listening on port ${port}...`))
+
 //Create the actual item
 async function createUser() {
   const user = new User({
-    name: 'Diana',
-    email: 'diana@gmail.com',
+    name: 'Juana',
+    lastName: 'de Arco',
+    email: 'juana@gmail.com',
     password: '12345678',
+    role: 'admin',
     isActive: true
   });
 
-  const result = await user.save();
-
-  console.log(result);
+  try {
+    const result = await user.save();
+    console.log(result);
+  } catch (ex) {
+    for (field in ex.errors)
+      console.log(ex.errors[field].message);
+  }
 }
 
 //createUser();
@@ -41,4 +49,4 @@ async function getUsers() {
   console.log(users);
 }
 
-getUsers();
+//getUsers();
