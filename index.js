@@ -2,12 +2,14 @@ const config = require('config');
 const Joi = require('joi');
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 //Routes
 const users = require('./routes/users');
 const auth = require('./routes/auth');
 
 const app = express();
+app.use(express.json());
 
 if (!config.get('jwtPrivateKey')) {
   console.error('FATAL ERRROR: jwtPrivateKey is not defined.');
@@ -15,46 +17,24 @@ if (!config.get('jwtPrivateKey')) {
 }
 
 //Connect to mongodb
-mongoose.connect('mongodb://localhost/api-app')
-  .then(() => console.log("Connected to MongoDB..."))
-  .catch(err => console.error('Could not connect to MongoDB...', err));
+mongoose.connect('mongodb://localhost/api-app', {
+  useNewUrlParser: true, useUnifiedTopology: true
+}, (err) => {
+  if (err) throw err;
+  console.log("Connected to MongoDB...");
+});
 
-app.use(express.json());
+app.use(cors({
+  origin: [
+    "http://localhost", "http://localhost:3001", "http://localhost:3000",
+    "*"
+  ],
+  credentials: true,
+  exposedHeaders: ['Access-Control-Allow-Origin', 'Vary', 'Content-Length', 'x-auth-token']
+}));
+
 app.use('/api/users', users);
 app.use('/api/auth', auth);
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Listening on port ${port}...`))
-
-//Create the actual item
-async function createUser() {
-  const user = new User({
-    name: 'Juana',
-    lastName: 'de Arco',
-    email: 'juana@gmail.com',
-    password: '12345678',
-    role: 'admin',
-    isActive: true
-  });
-
-  try {
-    const result = await user.save();
-    console.log(result);
-  } catch (ex) {
-    for (field in ex.errors)
-      console.log(ex.errors[field].message);
-  }
-}
-
-//createUser();
-
-async function getUsers() {
-  const users = await User
-    .find({ name: 'Enrique', isActive: true })
-    .limit(10)
-    .sort({ name: 1 })
-    .select({ email: 1 });
-  console.log(users);
-}
-
-//getUsers();
+app.listen(port, () => console.log(`Listening on port ${port}...`));

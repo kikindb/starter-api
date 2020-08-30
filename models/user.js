@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 const Joi = require('joi');
 const mongoose = require('mongoose');
 
+const roles = ['admin', 'editor', 'client', 'provider'];
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -23,6 +25,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 4,
     maxlength: 255,
+    trim: true,
     lowercase: true
   },
   password: {
@@ -33,7 +36,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['admin', 'editor', 'client', 'provider'],
+    enum: roles,
     default: 'client'
   },
   createdAt: { type: Date, default: Date.now },
