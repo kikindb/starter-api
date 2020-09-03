@@ -37,6 +37,7 @@ router.post('/facebook', async (req, res) => {
       lastName: req.body.last_name,
       email: req.body.email,
       password: Date.now() + '@facebook@' + req.body.email,
+      picture: ""
     }
     user = new User(newUserObject);
     const salt = await bcrypt.genSalt(10);
@@ -72,17 +73,21 @@ router.post('/facebook', async (req, res) => {
       for (field in ex.errors)
         console.log(ex.errors[field].message);
     }
+
+    try {
+      const userUpdate = await User.findByIdAndUpdate(socialAux.userId, { picture: req.body.picture.data.url }, { new: true, runValidators: true });
+
+      if (!userUpdate) return res.status(404).send('The user with the given id does not exist');
+
+      console.log(userUpdate);
+    } catch (e) {
+      res.status(400).send(e);
+    }
   }
-
-  //console.log(req);
-
-  /*const validPassword = await bcrypt.compare(req.body.password, user.password);
-
-  if (!validPassword) return res.status(400).send('Invalid email or password');*/
 
   const token = user.generateAuthToken();
   let returnObject = {
-    user: _.pick(user, ['_id', 'name', 'lastName', 'email', 'role', 'isActive']),
+    user: _.pick(user, ['_id', 'name', 'lastName', 'email', 'role', 'isActive', 'picture']),
     social: socialObject
   };
   res.header('x-auth-token', token).send(returnObject);
