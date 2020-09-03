@@ -1,9 +1,8 @@
+const router = require('express').Router();
 const auth = require('../middleware/auth');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const { User, validate } = require('../models/user');
-const express = require('express');
-const router = express.Router();
 
 //Get current user
 router.get('/me', auth, async (req, res) => {
@@ -47,7 +46,7 @@ router.patch('/:id', auth, async (req, res) => {
   const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
 
   if (!isValidOperation) {
-    return res.status(400).send({ error: 'Invalid updates' })
+    return res.status(400).send('Invalid updates');
   }
 
   try {

@@ -18,7 +18,7 @@ if (!config.get('jwtPrivateKey')) {
 
 //Connect to mongodb
 mongoose.connect('mongodb://localhost/api-app', {
-  useNewUrlParser: true, useUnifiedTopology: true
+  useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true
 }, (err) => {
   if (err) throw err;
   console.log("Connected to MongoDB...");
@@ -26,7 +26,7 @@ mongoose.connect('mongodb://localhost/api-app', {
 
 app.use(cors({
   origin: [
-    "http://localhost", "http://localhost:3001", "http://localhost:3000",
+    "http://localhost", "http://localhost:3001", "http://localhost:3000", "https://localhost:3001",
     "*"
   ],
   credentials: true,
