@@ -26,7 +26,7 @@ mongoose.connect('mongodb://localhost/api-app', {
 
 app.use(cors({
   origin: [
-    "http://localhost", "http://localhost:3001", "http://localhost:3000", "https://localhost:3001", "http://192.168.0.3", "https://192.168.0.3", "*"
+    "http://localhost", "http://localhost:3001", "http://localhost:3000", "https://localhost:3001", "http://192.168.0.3", "https://192.168.0.3", "http://localhost:5000", "*"
   ],
   credentials: true,
   exposedHeaders: ['Access-Control-Allow-Origin', 'Vary', 'Content-Length', 'x-auth-token']
