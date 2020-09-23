@@ -39,8 +39,6 @@ router.post('/', async (req, res) => {
 });
 //Update an user 
 router.patch('/:id', auth, async (req, res) => {
-  //const { error } = validate(req.body);
-  //if (error) return res.status(400).send(error.details[0].message);
   const updates = Object.keys(req.body);
   const allowedUpdates = ['name', 'lastName', 'email', 'isActive'];
   const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
