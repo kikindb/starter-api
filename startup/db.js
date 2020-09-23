@@ -6,7 +6,6 @@ module.exports = function () {
   //mongoose.connect(db)
   //.then(() => winston.info(`Connected to ${db}...`));
 
-
   mongoose.connect(db, {
     useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true
   }, (err) => {
