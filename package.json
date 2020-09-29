@@ -4,7 +4,8 @@
   "description": "All you need to start coding an API",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
+    "dev": "export app_jwtPrivateKey=12345 && nodemon index.js",
+    "start": "node index.js",
     "test": "jest --watchAll --verbose --coverage"
   },
   "keywords": [],
@@ -16,6 +17,7 @@
     "config": "^3.3.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "helmet": "^4.1.1",
     "joi": "^17.2.1",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
